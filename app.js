@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", function() {
     const generate = document.getElementById('generate');
     const solve = document.getElementById('solve');
 
+    const easy = document.getElementById('easy');
+    const medium = document.getElementById('medium');
+    const hard = document.getElementById('hard');
+
+    var difficultyCount = 50;
+
     for( let i = 0; i < 81; i++)
     {
         const cell = document.createElement('input');
@@ -98,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         fillDiagonal(emptyBoard);
         solveSudoku(emptyBoard);
-        removeDigits(emptyBoard, 50);
+        removeDigits(emptyBoard, difficultyCount);
 
         return emptyBoard;
     };
@@ -115,5 +121,17 @@ document.addEventListener("DOMContentLoaded", function() {
     generate.addEventListener('click', () => {
         const newPuzzle = generateSudoku();
         setBoard(newPuzzle);
+    });
+
+    easy.addEventListener('click', () => {
+        difficultyCount = 50;
+    });
+
+    medium.addEventListener('click', () => {
+        difficultyCount = 57;
+    });
+
+    hard.addEventListener('click', () => {
+        difficultyCount = 65;
     });
 });
