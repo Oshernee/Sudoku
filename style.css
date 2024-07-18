@@ -46,3 +46,9 @@ button {
 button:hover {
     background-color: #B7D1DA;
 }
+
+#input-buttons {
+    display: grid;
+    grid-template-columns: repeat(9, 50px);
+    gap: 2px;
+}
