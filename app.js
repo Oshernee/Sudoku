@@ -3,20 +3,38 @@ document.addEventListener("DOMContentLoaded", function() {
     const generate = document.getElementById('generate');
     const solve = document.getElementById('solve');
 
+    const inputButtons = document.getElementById('input-buttons');
+
     const easy = document.getElementById('easy');
     const medium = document.getElementById('medium');
     const hard = document.getElementById('hard');
 
     var difficultyCount = 50;
+    let selectedCell = null;
 
-    for( let i = 0; i < 81; i++)
-    {
+    for (let i = 0; i < 81; i++) {
         const cell = document.createElement('input');
-        cell.type = 'text';
-        cell.min = 1;
-        cell.max = 9;
-        cell.maxLength = 1;
+        cell.setAttribute('type', 'text');
+        cell.setAttribute('readonly', 'true');
+        cell.addEventListener('click', () => {
+            if (selectedCell) {
+                selectedCell.classList.remove('selected');
+            }
+            cell.classList.add('selected');
+            selectedCell = cell;
+        });
         board.appendChild(cell);
+    }
+
+    for (let i = 1; i <= 9; i++) {
+        var button = document.createElement('button');
+        button.textContent = i;
+        button.addEventListener('click', () => {
+            if (selectedCell) {
+                selectedCell.value = i;
+            }
+        });
+        inputButtons.appendChild(button);
     }
 
     const getBoard = () => {
