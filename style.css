@@ -52,3 +52,19 @@ button:hover {
     grid-template-columns: repeat(9, 50px);
     gap: 2px;
 }
+
+.selected {
+    background-color: #E2E8DD;
+}
+
+.selected-dificulty {
+    background-color: #B7D1DA;
+}
+
+.invalid {
+    color: red;
+}
+
+.valid {
+    color: blue;
+}
