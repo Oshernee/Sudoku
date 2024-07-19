@@ -5,11 +5,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const inputButtons = document.getElementById('input-buttons');
 
+    const buttons = document.querySelectorAll('.difficulty');
     const easy = document.getElementById('easy');
     const medium = document.getElementById('medium');
     const hard = document.getElementById('hard');
 
-    var difficultyCount = 50;
+    var difficultyCount = 0;
     let selectedCell = null;
 
     for (let i = 0; i < 81; i++) {
@@ -30,8 +31,10 @@ document.addEventListener("DOMContentLoaded", function() {
         var button = document.createElement('button');
         button.textContent = i;
         button.addEventListener('click', () => {
-            if (selectedCell) {
+            if (selectedCell && !selectedCell.classList.contains('generated')) {
                 selectedCell.value = i;
+                selectedCell.classList.add('user-input');
+                validateCell(selectedCell, i);
             }
         });
         inputButtons.appendChild(button);
@@ -40,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const getBoard = () => {
         const cells = Array.from(board.children);
         const boardArray = [];
-
         for (let i = 0; i < 9; i++) {
             boardArray.push(cells.slice(i * 9, (i + 1) * 9).map(cell => parseInt(cell.value) || 0));
         }
@@ -53,6 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
             const row = Math.floor(i / 9);
             const col = i % 9;
             cells[i].value = boardArray[row][col] === 0 ? '' : boardArray[row][col];
+            if (boardArray[row][col] !== 0) {
+                cells[i].classList.add('generated');
+            } else {
+                cells[i].classList.remove('generated');
+            }
         }
     };
 
@@ -127,6 +134,23 @@ document.addEventListener("DOMContentLoaded", function() {
         return emptyBoard;
     };
 
+    const validateCell = (cell, num) => {
+        const boardArray = getBoard();
+        const cellIndex = Array.from(board.children).indexOf(cell);
+        const row = Math.floor(cellIndex / 9);
+        const col = cellIndex % 9;
+
+        boardArray[row][col] = 0;
+        if (!isValid(boardArray, row, col, num)) {
+            cell.classList.remove('valid');
+            cell.classList.add('invalid');
+        } else {
+            cell.classList.remove('invalid');
+            cell.classList.add('valid');
+        }
+        boardArray[row][col] = num;
+    };
+
     solve.addEventListener('click', () => {
         const boardArray = getBoard();
         if (solveSudoku(boardArray)) {
@@ -143,13 +167,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     easy.addEventListener('click', () => {
         difficultyCount = 50;
+        buttons.forEach(btn => btn.classList.remove('selected-dificulty'));
+        easy.classList.add('selected-dificulty');
     });
 
     medium.addEventListener('click', () => {
         difficultyCount = 57;
+        buttons.forEach(btn => btn.classList.remove('selected-dificulty'));
+        medium.classList.add('selected-dificulty');
     });
 
     hard.addEventListener('click', () => {
         difficultyCount = 65;
+        buttons.forEach(btn => btn.classList.remove('selected-dificulty'));
+        hard.classList.add('selected-dificulty');
     });
 });
