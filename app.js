@@ -2,9 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const board = document.getElementById('sudoku-board');
     const generate = document.getElementById('generate');
     const solve = document.getElementById('solve');
-
     const inputButtons = document.getElementById('input-buttons');
-
     const buttons = document.querySelectorAll('.difficulty');
     const easy = document.getElementById('easy');
     const medium = document.getElementById('medium');
@@ -12,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var difficultyCount = 0;
     let selectedCell = null;
+    let generatedBoard = null;
 
     for (let i = 0; i < 81; i++) {
         const cell = document.createElement('input');
@@ -57,8 +56,12 @@ document.addEventListener("DOMContentLoaded", function() {
             cells[i].value = boardArray[row][col] === 0 ? '' : boardArray[row][col];
             if (boardArray[row][col] !== 0) {
                 cells[i].classList.add('generated');
+                cells[i].classList.remove('invalid');
+                cells[i].classList.remove('valid');
             } else {
                 cells[i].classList.remove('generated');
+                cells[i].classList.remove('invalid');
+                cells[i].classList.remove('valid');
             }
         }
     };
@@ -129,40 +132,41 @@ document.addEventListener("DOMContentLoaded", function() {
 
         fillDiagonal(emptyBoard);
         solveSudoku(emptyBoard);
+        generatedBoard = JSON.parse(JSON.stringify(emptyBoard)); // deep copy
         removeDigits(emptyBoard, difficultyCount);
 
         return emptyBoard;
     };
 
     const validateCell = (cell, num) => {
-        const boardArray = getBoard();
         const cellIndex = Array.from(board.children).indexOf(cell);
         const row = Math.floor(cellIndex / 9);
         const col = cellIndex % 9;
-
-        boardArray[row][col] = 0;
-        if (!isValid(boardArray, row, col, num)) {
-            cell.classList.remove('valid');
-            cell.classList.add('invalid');
-        } else {
-            cell.classList.remove('invalid');
-            cell.classList.add('valid');
+        if (generatedBoard) {     
+            if (generatedBoard[row][col] !== 0 && generatedBoard[row][col] !== num) {
+                cell.classList.remove('valid');
+                cell.classList.add('invalid');
+            } else {
+                cell.classList.remove('invalid');
+                cell.classList.add('valid');
+            }
         }
-        boardArray[row][col] = num;
     };
 
     solve.addEventListener('click', () => {
-        const boardArray = getBoard();
-        if (solveSudoku(boardArray)) {
-            setBoard(boardArray);
-        } else {
-            alert("No solution exists for the given Sudoku.");
+        if (generatedBoard) {
+            const boardArray = JSON.parse(JSON.stringify(generatedBoard)); 
+            if (solveSudoku(boardArray)) {
+                setBoard(boardArray);
+            } else {
+                alert("No solution exists for the given Sudoku.");
+            }
         }
     });
 
     generate.addEventListener('click', () => {
-        const newPuzzle = generateSudoku();
-        setBoard(newPuzzle);
+        let playableBoard = generateSudoku();
+        setBoard(playableBoard);
     });
 
     easy.addEventListener('click', () => {
