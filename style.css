@@ -5,19 +5,25 @@ body {
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #E2E8DD;
+    color: #4E5340;
 }
 
 .main-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #B7D1DA;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #sudoku-board {
     display: grid;
     grid-template-columns: repeat(9, 50px);
     grid-template-rows: repeat(9, 50px);
-    gap: 2px;
+    gap: 1px;
     margin-bottom: 20px;
 }
 
@@ -26,45 +32,51 @@ input {
     height: 50px;
     text-align: center;
     font-size: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #95A3A4;
     outline: none;
+    background-color: #E2E8DD;
+    color: #4E5340;
 }
 
 button {
     margin: 8px;
     padding: 8px 16px;
     font-size: 24px;
-    background-color: #E2E8DD;
+    background-color: #95A3A4;
     border-radius: 8px;
     text-align: center;
-    border: 2px solid #95A3A4;
-    transition-duration: 0.4s;
-    color: #697268;
-
+    border: 2px solid #697268;
+    transition: background-color 0.4s, color 0.4s;
+    color: #E2E8DD;
+    cursor: pointer;
 }
 
 button:hover {
     background-color: #B7D1DA;
+    color: #4E5340;
 }
 
 #input-buttons {
     display: grid;
-    grid-template-columns: repeat(9, 50px);
+    grid-template-columns: repeat(9, 65px);
     gap: 2px;
 }
 
 .selected {
-    background-color: #E2E8DD;
+    background-color: #B7D1DA;
 }
 
 .selected-dificulty {
     background-color: #B7D1DA;
+    color: #4E5340;
 }
 
 .invalid {
     color: red;
+    border-color: red;
 }
 
 .valid {
     color: blue;
+    border-color: blue;
 }
